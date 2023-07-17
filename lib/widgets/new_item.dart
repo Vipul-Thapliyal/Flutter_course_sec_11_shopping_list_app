@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_app_section_11/data/categories.dart';
 import 'package:shopping_list_app_section_11/models/category.dart';
+import 'package:shopping_list_app_section_11/models/grocery_item.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({Key? key}) : super(key: key);
@@ -13,15 +14,20 @@ class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
 
   var _enteredName = "";
-  var _enterdQuantity = 1;
+  var _enteredQuantity = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
 
   void _saveItem() {
     if(_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredName);
-      print(_enterdQuantity);
-      print(_selectedCategory);
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: DateTime.now().toString(),
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory,
+        )
+      );
     }
   }
 
@@ -65,7 +71,7 @@ class _NewItemState extends State<NewItem> {
                       decoration: const InputDecoration(
                         label: Text("Quantity")
                       ),
-                      initialValue: _enterdQuantity.toString(),
+                      initialValue: _enteredQuantity.toString(),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if(
@@ -79,7 +85,7 @@ class _NewItemState extends State<NewItem> {
                         return null;
                       },
                       onSaved: (value) {
-                        _enterdQuantity = int.parse(value!);
+                        _enteredQuantity = int.parse(value!);
                       },
                     ),
                   ),
